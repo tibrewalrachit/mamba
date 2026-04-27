@@ -6,4 +6,5 @@
 //! selects the operation, and `rs1` carries a host-memory pointer to a
 //! per-op descriptor (see spec §0.4–§0.7).
 
+pub mod desc;
 pub mod insn;
