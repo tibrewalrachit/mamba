@@ -9,3 +9,6 @@ path = "src/lib.rs"
 
 [dependencies]
 emamba-core = { path = "../core" }
+emamba-compute = { path = "../compute" }
+emamba-dram = { path = "../dram" }
+emamba-trace = { path = "../trace" }
