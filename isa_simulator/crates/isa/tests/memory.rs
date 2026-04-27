@@ -21,9 +21,10 @@ fn test02_vec_memory_word_then_byte_reads() {
     assert!(mem.write_mem(0, MemAccessSize::Word, 0xDEAD_BEEF));
     assert_eq!(mem.read_mem(0, MemAccessSize::Word), Some(0xDEAD_BEEF));
     // Little-endian byte order: low byte at low addr.
+    // 0xDEAD_BEEF.to_le_bytes() = [0xEF, 0xBE, 0xAD, 0xDE]
     assert_eq!(mem.read_mem(0, MemAccessSize::Byte), Some(0xEF));
-    assert_eq!(mem.read_mem(1, MemAccessSize::Byte), Some(0xAD));
-    assert_eq!(mem.read_mem(2, MemAccessSize::Byte), Some(0xBE));
+    assert_eq!(mem.read_mem(1, MemAccessSize::Byte), Some(0xBE));
+    assert_eq!(mem.read_mem(2, MemAccessSize::Byte), Some(0xAD));
     assert_eq!(mem.read_mem(3, MemAccessSize::Byte), Some(0xDE));
     assert_eq!(mem.read_mem(0, MemAccessSize::HalfWord), Some(0xBEEF));
     assert_eq!(mem.read_mem(2, MemAccessSize::HalfWord), Some(0xDEAD));

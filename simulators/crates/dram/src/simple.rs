@@ -26,6 +26,9 @@ pub struct SimpleDram {
     queue_depth: u32,
     in_flight: VecDeque<Entry>,
     next_id: u64,
+    /// Earliest cycle at which new bytes can start transferring over the bus.
+    /// Tracks bandwidth serialization: back-to-back requests share one bus.
+    bandwidth_free_at: Cycle,
 }
 
 impl SimpleDram {
@@ -37,6 +40,7 @@ impl SimpleDram {
             queue_depth,
             in_flight: VecDeque::new(),
             next_id: 0,
+            bandwidth_free_at: 0,
         }
     }
 
@@ -50,7 +54,11 @@ impl SimpleDram {
         }
         let bw = self.bandwidth_bytes_per_cycle as u64;
         let bw_cycles = (bytes as u64 + bw - 1) / bw;
-        let done_by = now + self.latency_cycles as Cycle + bw_cycles;
+        // Transfer starts only when both (a) the bus is free and (b) the
+        // minimum latency has elapsed.  done_by = transfer_start + bw_cycles.
+        let transfer_start = self.bandwidth_free_at.max(now + self.latency_cycles as Cycle);
+        let done_by = transfer_start + bw_cycles;
+        self.bandwidth_free_at = done_by;
         let id = self.next_id;
         self.next_id += 1;
         self.in_flight.push_back(Entry { id, done_by });

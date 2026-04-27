@@ -61,6 +61,18 @@ impl StatTree {
         }
     }
 
+    /// Walk `path` and return the `u64` leaf value, or `None` if missing/wrong type.
+    pub fn get_u64(&self, path: &[&str]) -> Option<u64> {
+        if path.is_empty() {
+            return None;
+        }
+        match self.children.get(path[0])? {
+            StatNode::Leaf(StatValue::U64(n)) if path.len() == 1 => Some(*n),
+            StatNode::Subtree(sub) if path.len() > 1 => sub.get_u64(&path[1..]),
+            _ => None,
+        }
+    }
+
     pub fn to_yaml_string(&self) -> String {
         let mut out = String::new();
         self.write_yaml(&mut out, 0);
