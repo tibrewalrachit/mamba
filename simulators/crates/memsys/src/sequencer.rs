@@ -63,6 +63,18 @@ impl Sequencer {
     pub fn all_idle(&self, now: Cycle) -> bool {
         self.units.iter().all(|u| u.ready(now))
     }
+
+    pub fn write_stats(&self, sink: &mut dyn emamba_core::stats::StatSink, total_cycles: Cycle) {
+        for u in &self.units {
+            let name = u.name();
+            sink.record_u64(&["units", name, "ops"], u.ops_completed());
+            sink.record_u64(&["units", name, "busy_cycles"], u.busy_cycles());
+            sink.record_u64(
+                &["units", name, "idle_cycles"],
+                total_cycles.saturating_sub(u.busy_cycles()),
+            );
+        }
+    }
 }
 
 impl Default for Sequencer {

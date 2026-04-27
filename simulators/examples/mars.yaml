@@ -1,0 +1,27 @@
+# eMamba simulator MARS-frame defaults — paper §5.
+# Currently informational; the binary's `default_mars()` chip is wired to
+# match these values. Phase 5 ships the YAML as the documented source of
+# truth; runtime decoding lands once a second config is needed.
+Frontend:
+  impl: OpTrace
+  clock_ratio: 1
+  trace: examples/mars_one_token.trace
+
+MemorySystem:
+  impl: AcceleratorChip
+  clock_ratio: 1
+  Sequencer:    { impl: PipelinedSequencer, pipeline_depth: 8 }
+  Scratchpad:   { impl: BankedScratchpad, banks: 4, bytes_per_bank: 16384, port_width_bytes: 16, read_ports_per_bank: 1, write_ports_per_bank: 1 }
+  WeightBuffer: { impl: SimpleWeightBuffer, capacity_bytes: 65536, fill_bw_bytes_per_cycle: 16 }
+  StateBuffer:  { impl: SimpleStateBuffer, capacity_bytes: 4096 }
+  ComputeUnits:
+    RangeNorm:   { impl: RangeNorm, compute_units: 10, div_latency: 4 }
+    Conv1D:      { impl: Conv1D, kernel_size: 4, pipeline_fill: 2 }
+    SsmState:    { impl: SsmState, mac_array_width: 32, read_state_lat: 1, write_state_lat: 1 }
+    SsmOutput:   { impl: SsmOutput, mac_array_width: 32, pipeline_fill: 2 }
+    PwlSilu:     { impl: PwlSilu, segments: 17, lut_latency: 1 }
+    PwlExp:      { impl: PwlExp, segments: 11, lut_latency: 1 }
+    Relu:        { impl: Relu }
+    LinearProj:  { impl: LinearProj, mac_width: 64, pipeline_fill: 2 }
+    ResidualAdd: { impl: ResidualAdd, adder_width: 16 }
+  Dram:         { impl: SimpleDram, bandwidth_bytes_per_cycle: 8, latency_cycles: 80, queue_depth: 16 }

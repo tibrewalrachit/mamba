@@ -6,4 +6,5 @@ members = [
     "crates/compute",
     "crates/memsys",
     "crates/dram",
+    "emamba",
 ]

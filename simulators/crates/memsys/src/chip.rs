@@ -101,6 +101,17 @@ impl Simulation {
         &self.chip
     }
 
+    pub fn write_stats(
+        &self,
+        sink: &mut dyn emamba_core::stats::StatSink,
+        trace_path: &str,
+    ) {
+        sink.record_u64(&["simulator", "total_cycles"], self.now);
+        sink.record_u64(&["simulator", "ops_completed"], self.completed_ops());
+        sink.record_str(&["simulator", "trace_path"], trace_path);
+        self.chip.sequencer.write_stats(sink, self.now);
+    }
+
     /// Drive the simulator until both the frontend and the sequencer drain.
     /// Conservative cycle bound prevents infinite loops on bad input.
     pub fn run_to_completion(&mut self) {

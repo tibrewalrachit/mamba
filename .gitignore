@@ -1,3 +1,5 @@
 ramulator2
 workload/.venv
 rrs
+arch-hdl/arch-com
+cpu_emulator/rvemu

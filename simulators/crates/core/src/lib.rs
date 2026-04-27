@@ -4,6 +4,7 @@ pub mod config;
 pub mod dtype;
 pub mod op;
 pub mod registry;
+pub mod stats;
 pub mod tensor;
 pub mod tick;
 
