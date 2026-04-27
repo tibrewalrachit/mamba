@@ -32,6 +32,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "emamba-dram"
+version = "0.1.0"
+dependencies = [
+ "emamba-core",
+]
+
+[[package]]
+name = "emamba-memsys"
+version = "0.1.0"
+dependencies = [
+ "emamba-core",
+]
+
+[[package]]
 name = "emamba-trace"
 version = "0.1.0"
 dependencies = [
