@@ -1,0 +1,50 @@
+====================================================================================
+eMamba workload performance analysis — state-spaces/mamba-130m-hf
+  prompt='Hey how are you doing?'  prefill_len=6  decode_steps=10
+  generated: Hey how are you doing?
+
+I'm so glad you're here.
+  config: D=768  ED=1536  N=16  d_conv=4  M=24  vocab=50280
+  weights: 129.1 M params × 4 B = 516.5 MB
+  wall-time(generate): 1672.77 ms  (≈ 104.5 ms/token avg)
+------------------------------------------------------------------------------------
+SUMMARY
+  prefill    1471.2 ms     1.58 GF   top-time: conv1d=1406.6ms, ssm_scan_etc=29.1ms, in_proj=21.5ms
+  decode      190.0 ms     2.36 GF   top-time: ssm_scan_etc=78.0ms, in_proj=43.6ms, lm_head=29.7ms
+  decode/token  ~19.0 ms
+  decode top-weight-traffic: in_proj=2038.4MB, embedding=1390.1MB, lm_head=1390.1MB
+  Decode is memory-bound: AI < 1 F/B for every linear (each weight
+  byte fetched does < 1 FLOP because batch=1 reuses nothing). The
+  SSM scan is also bandwidth-bound on the recurrent state. This is
+  exactly the regime eMamba's on-chip pipeline (Fig. 5) attacks.
+  Caveats:
+   - prefill conv1d wall-time is inflated: HF slow_forward runs a
+     depthwise Conv1d (1536 groups) on CPU which is pathologically
+     slow without the causal_conv1d_fn kernel. On the eMamba ASIC
+     this is a small custom block, not a bottleneck.
+   - decode has no conv1d row: Mamba's step() bypasses the Conv1d
+     module and folds the cached conv into ssm_scan_etc.
+   - lm_head and embedding share weights in mamba-130m, so the two
+     154 MB-per-call entries are the same tensor (cache may reuse).
+====================================================================================
+=== PREFILL  (1 forward × L=6)  total=1471.24 ms  total=1.576 GFLOPs ===
+category       calls    time_ms  time%    GFLOPs  flop%   in_MB   wt_MB    AI_F/B
+embedding          1      0.025   0.0%     0.000   0.0%    0.00  154.46      0.00
+norm              25      1.136   0.1%     0.001   0.0%    0.46    0.08      1.07
+in_proj           24     21.534   1.5%     0.679  43.1%    0.44  226.49      2.99
+conv1d            24   1406.647  95.6%     0.000   0.0%    0.88    0.74      0.00
+x_proj            24      1.730   0.1%     0.035   2.2%    0.88   11.80      2.79
+dt_proj           24      1.061   0.1%     0.021   1.3%    0.03    7.23      2.93
+ssm_scan_etc      24     29.108   2.0%     0.036   2.3%   72.55    0.00      0.50
+out_proj          24      6.662   0.5%     0.340  21.6%    0.88  113.25      2.98
+lm_head            1      3.340   0.2%     0.463  29.4%    0.02  154.46      3.00
+=== DECODE   (10 forwards × L=1)  total=190.04 ms  total=2.364 GFLOPs ===
+category       calls    time_ms  time%    GFLOPs  flop%   in_MB   wt_MB    AI_F/B
+embedding          9      0.216   0.1%     0.000   0.0%    0.00 1390.14      0.00
+norm             225      4.654   2.4%     0.001   0.0%    0.69    0.69      0.62
+in_proj          216     43.630  23.0%     1.019  43.1%    0.66 2038.43      0.50
+x_proj           216      4.105   2.2%     0.053   2.2%    1.33  106.17      0.49
+dt_proj          216      5.804   3.1%     0.032   1.3%    0.04   65.03      0.49
+ssm_scan_etc     216     77.998  41.0%     0.054   2.3%  108.82    0.00      0.50
+out_proj         216     23.966  12.6%     0.510  21.6%    1.33 1019.22      0.50
+lm_head            9     29.670  15.6%     0.695  29.4%    0.03 1390.14      0.50
