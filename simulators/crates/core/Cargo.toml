@@ -1,0 +1,23 @@
+[package]
+name = "emamba-core"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+# Project-wide transitive pins for the late-2021 toolchain (rustc 1.59).
+# Newer versions of these crates bump their MSRV beyond what we have.
+[dependencies]
+serde = { version = "=1.0.130", features = ["derive"] }
+serde_derive = "=1.0.130"
+serde_yaml = "=0.8.23"
+proc-macro2 = "=1.0.36"
+quote = "=1.0.14"
+syn = "=1.0.84"
+ryu = "=1.0.9"
+itoa = "=1.0.1"
+yaml-rust = "=0.4.5"
+linked-hash-map = "=0.5.4"
+
