@@ -1,0 +1,19 @@
+[package]
+name = "emamba"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[[bin]]
+name = "emamba"
+path = "src/main.rs"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+emamba-core = { path = "../crates/core" }
+emamba-compute = { path = "../crates/compute" }
+emamba-memsys = { path = "../crates/memsys" }
+emamba-trace = { path = "../crates/trace" }
+emamba-dram = { path = "../crates/dram" }

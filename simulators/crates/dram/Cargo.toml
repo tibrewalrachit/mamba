@@ -1,0 +1,11 @@
+[package]
+name = "emamba-dram"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+emamba-core = { path = "../core" }

@@ -1,0 +1,4 @@
+# eMamba simulator — single-op smoke test.
+# Drives one RANGE_NORM op through the chip; total_cycles must match the
+# RangeNorm formula on the default-MARS config (10 units, div_latency=4 → 54).
+RANGE_NORM in=0x1000 in_mem=sram out=0x2000 out_mem=sram D=20 dtype=int8

@@ -1,0 +1,17 @@
+# eMamba simulator — one-token MARS-style frame.
+# Roughly mirrors paper §4.4 / Figure 5 dataflow: load → range-norm → linear
+# → conv1d → silu → ssm-state → ssm-output → silu → linear → residual → store.
+# Per-token, single Mamba block, MARS dimensions (D=20, N=8, E=2).
+
+LAYER 0 TOKEN 0
+LOAD       src=0x80000000 src_mem=dram dst=0x1000 dst_mem=sram bytes=20
+RANGE_NORM in=0x1000 in_mem=sram out=0x1100 out_mem=sram D=20 dtype=int8
+LINEAR     in=0x1100 in_mem=sram out=0x1200 out_mem=sram in_dim=20 out_dim=40 dtype=int8
+CONV1D     in=0x1200 in_mem=sram out=0x1300 out_mem=sram D=20 K=4 dtype=int8
+PWL_SILU   in=0x1300 in_mem=sram out=0x1400 out_mem=sram D=20 dtype=int8
+SSM_STATE  in=0x1400 in_mem=sram state=0xA000 state_mem=sram D=20 N=8 E=2 dtype=int8 state_dtype=int24
+SSM_OUTPUT state=0xA000 state_mem=sram in=0x1400 in_mem=sram out=0x1500 out_mem=sram D=20 N=8 E=2 dtype=int8
+PWL_SILU   in=0x1500 in_mem=sram out=0x1600 out_mem=sram D=20 dtype=int8
+LINEAR     in=0x1600 in_mem=sram out=0x1700 out_mem=sram in_dim=20 out_dim=20 dtype=int8
+RESIDUAL   a=0x1700 a_mem=sram b=0x1000 b_mem=sram out=0x1800 out_mem=sram D=20 dtype=int8
+STORE      src=0x1800 src_mem=sram dst=0x80001000 dst_mem=dram bytes=20

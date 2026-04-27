@@ -1,0 +1,155 @@
+{
+  "model": "state-spaces/mamba-130m-hf",
+  "prompt": "Hey how are you doing?",
+  "prefill_len": 6,
+  "decode_steps": 10,
+  "wall_time_ms": 1672.769209,
+  "config": {
+    "hidden_size": 768,
+    "intermediate_size": 1536,
+    "state_size": 16,
+    "conv_kernel": 4,
+    "num_hidden_layers": 24,
+    "vocab_size": 50280
+  },
+  "prefill": {
+    "embedding": {
+      "time_ms": 0.02458300000007796,
+      "flops": 0,
+      "in_bytes": 48,
+      "out_bytes": 18432,
+      "weight_bytes": 154460160,
+      "calls": 1
+    },
+    "norm": {
+      "time_ms": 1.135875000002784,
+      "flops": 576000,
+      "in_bytes": 460800,
+      "out_bytes": 460800,
+      "weight_bytes": 76800,
+      "calls": 25
+    },
+    "in_proj": {
+      "time_ms": 21.53350000000298,
+      "flops": 679477248,
+      "in_bytes": 442368,
+      "out_bytes": 1769472,
+      "weight_bytes": 226492416,
+      "calls": 24
+    },
+    "conv1d": {
+      "time_ms": 1406.6465859999998,
+      "flops": 1728,
+      "in_bytes": 884736,
+      "out_bytes": 1327104,
+      "weight_bytes": 737280,
+      "calls": 24
+    },
+    "x_proj": {
+      "time_ms": 1.7300829999999934,
+      "flops": 35389440,
+      "in_bytes": 884736,
+      "out_bytes": 46080,
+      "weight_bytes": 11796480,
+      "calls": 24
+    },
+    "dt_proj": {
+      "time_ms": 1.0609180000011875,
+      "flops": 21233664,
+      "in_bytes": 27648,
+      "out_bytes": 884736,
+      "weight_bytes": 7225344,
+      "calls": 24
+    },
+    "out_proj": {
+      "time_ms": 6.661833000004336,
+      "flops": 339738624,
+      "in_bytes": 884736,
+      "out_bytes": 442368,
+      "weight_bytes": 113246208,
+      "calls": 24
+    },
+    "lm_head": {
+      "time_ms": 3.3401669999992833,
+      "flops": 463380480,
+      "in_bytes": 18432,
+      "out_bytes": 1206720,
+      "weight_bytes": 154460160,
+      "calls": 1
+    },
+    "ssm_scan_etc": {
+      "time_ms": 29.108373999991045,
+      "flops": 36274176,
+      "in_bytes": 72548352,
+      "out_bytes": 0,
+      "weight_bytes": 0,
+      "calls": 24
+    }
+  },
+  "decode": {
+    "embedding": {
+      "time_ms": 0.21603899999433906,
+      "flops": 0,
+      "in_bytes": 72,
+      "out_bytes": 27648,
+      "weight_bytes": 1390141440,
+      "calls": 9
+    },
+    "norm": {
+      "time_ms": 4.653587999984055,
+      "flops": 864000,
+      "in_bytes": 691200,
+      "out_bytes": 691200,
+      "weight_bytes": 691200,
+      "calls": 225
+    },
+    "in_proj": {
+      "time_ms": 43.63012499999108,
+      "flops": 1019215872,
+      "in_bytes": 663552,
+      "out_bytes": 2654208,
+      "weight_bytes": 2038431744,
+      "calls": 216
+    },
+    "x_proj": {
+      "time_ms": 4.105299000011442,
+      "flops": 53084160,
+      "in_bytes": 1327104,
+      "out_bytes": 69120,
+      "weight_bytes": 106168320,
+      "calls": 216
+    },
+    "dt_proj": {
+      "time_ms": 5.804335999998855,
+      "flops": 31850496,
+      "in_bytes": 41472,
+      "out_bytes": 1327104,
+      "weight_bytes": 65028096,
+      "calls": 216
+    },
+    "out_proj": {
+      "time_ms": 23.96553900001841,
+      "flops": 509607936,
+      "in_bytes": 1327104,
+      "out_bytes": 663552,
+      "weight_bytes": 1019215872,
+      "calls": 216
+    },
+    "lm_head": {
+      "time_ms": 29.669793000000055,
+      "flops": 695070720,
+      "in_bytes": 27648,
+      "out_bytes": 1810080,
+      "weight_bytes": 1390141440,
+      "calls": 9
+    },
+    "ssm_scan_etc": {
+      "time_ms": 77.99808299997929,
+      "flops": 54411264,
+      "in_bytes": 108822528,
+      "out_bytes": 0,
+      "weight_bytes": 0,
+      "calls": 216
+    }
+  }
+}
