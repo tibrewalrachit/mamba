@@ -7,6 +7,7 @@
 //! per-op descriptor (see spec §0.4–§0.7).
 
 pub mod desc;
+pub mod executor;
 pub mod insn;
 pub mod memory;
 pub mod numerics;
