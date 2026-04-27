@@ -12,6 +12,8 @@ pub mod range_norm;
 pub mod relu;
 pub mod residual;
 pub mod ssm;
+pub mod unit;
+pub mod units;
 
 pub use conv1d::Conv1DUnit;
 pub use linear::LinearProjUnit;
@@ -20,3 +22,4 @@ pub use range_norm::RangeNormUnit;
 pub use relu::ReluUnit;
 pub use residual::ResidualAddUnit;
 pub use ssm::{SsmOutputUnit, SsmStateUnit};
+pub use unit::{ComputeUnit, PipelineSlot};

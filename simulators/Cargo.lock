@@ -42,7 +42,10 @@ dependencies = [
 name = "emamba-memsys"
 version = "0.1.0"
 dependencies = [
+ "emamba-compute",
  "emamba-core",
+ "emamba-dram",
+ "emamba-trace",
 ]
 
 [[package]]

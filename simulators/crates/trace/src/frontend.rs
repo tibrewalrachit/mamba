@@ -41,6 +41,18 @@ impl OpTraceFrontend {
     pub fn ops_remaining(&self) -> usize {
         self.pending.len() + self.held.as_ref().map(|_| 1).unwrap_or(0)
     }
+
+    /// Pull-mode: take the next op directly. Used by `AcceleratorChip`'s
+    /// run loop, which drives ops itself rather than via the
+    /// `DispatchHandle` callback. Returns `None` when the queue is empty.
+    pub fn try_next(&mut self) -> Option<Op> {
+        self.held.take().or_else(|| self.pending.pop_front())
+    }
+
+    /// Pull-mode back-pressure: return an op so it's tried again next cycle.
+    pub fn return_op(&mut self, op: Op) {
+        self.held = Some(op);
+    }
 }
 
 impl Tick for OpTraceFrontend {

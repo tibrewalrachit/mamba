@@ -46,7 +46,7 @@ pub struct Op {
     pub outputs: Vec<TensorDesc>,
     pub params: OpParams,
     pub scratch: [i32; 4],
-    pub callback: Option<Box<dyn FnOnce(&Op) + Send>>,
+    pub callback: Option<Box<dyn FnOnce(&Op)>>,
 }
 
 impl std::fmt::Debug for Op {
