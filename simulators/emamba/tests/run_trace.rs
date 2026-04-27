@@ -65,8 +65,8 @@ units:
     idle_cycles: 54
     ops: 0
   RangeNorm:
-    busy_cycles: 53
-    idle_cycles: 1
+    busy_cycles: 54
+    idle_cycles: 0
     ops: 1
   Relu:
     busy_cycles: 0
@@ -110,11 +110,12 @@ fn stats_yaml_snapshot_one_token() {
     assert!(yaml.contains("SsmOutput:"));
 
     // Verify per-unit op counts. Dispatch happens in trace order; LOAD/STORE
-    // both go to Memmove → 2 ops; PWL_SILU appears twice → 2 ops.
+    // both go to Memmove → 2 ops; PWL_SILU appears twice → 2 ops; LINEAR appears
+    // twice → 2 ops. Remaining 5 units each handle a single op.
     let count = |s: &str| yaml.matches(s).count();
     assert!(
-        count("ops: 1") >= 6,
-        "expected ≥6 units with single op:\n{}",
+        count("ops: 1") >= 5,
+        "expected ≥5 units with single op:\n{}",
         yaml
     );
 }

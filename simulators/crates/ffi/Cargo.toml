@@ -1,0 +1,13 @@
+[package]
+name = "emamba-ffi"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[lib]
+name = "emamba_ffi"
+path = "src/lib.rs"
+crate-type = ["staticlib"]
+
+[dependencies]
+emamba-compute = { path = "../compute" }
